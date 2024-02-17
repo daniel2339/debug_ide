@@ -185,7 +185,7 @@ function showmodal() {
 }
 
 function signin(){
-    window.location.href='sign_in_up.html'
+    window.location.href='./login'
 }
 
 function run() {

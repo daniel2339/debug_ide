@@ -9,8 +9,18 @@ from django.contrib import auth
 def hello(request):
     print(request.method)
 
+    if request.user.is_authenticated:
+        return render(request, 'index.html',locals())
+    else:
+        return HttpResponseRedirect('/debug_ide/login')
+
     # return HttpResponse('helloWorld')
-    return render(request, 'index.html', locals())
+    # return render(request, 'index.html', locals())
+
+def logout(request):
+    auth.logout(request)
+    return HttpResponseRedirect('/debug_ide/')
+
 
 def login(request):
 

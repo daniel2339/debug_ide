@@ -184,8 +184,8 @@ function showmodal() {
         ;
 }
 
-function signin(){
-    window.location.href='./login'
+function logout(){
+    window.location.href='./logout'
 }
 
 function run() {

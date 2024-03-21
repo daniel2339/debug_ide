@@ -1,10 +1,17 @@
 from django.shortcuts import render , HttpResponse, HttpResponseRedirect
 from django.views.decorators.csrf import ensure_csrf_cookie
 from django.contrib import auth
+from django.contrib.auth.models import User
 
 @ensure_csrf_cookie
 
 # Create your views here.
+
+def signup(request):
+
+    user = User.objects.create_user("")
+
+    return render(request, 'signup.html',locals())
 
 def hello(request):
     print(request.method)

@@ -9,7 +9,22 @@ from django.contrib.auth.models import User
 
 def signup(request):
 
-    user = User.objects.create_user("")
+    #Html / Javascript
+    #   確認：使用者名稱
+    #   確認：密碼一致
+    #   確認：Email
+    #   確認：同意條款
+    #   ajax送出：註冊資料
+    #   跳轉：登入頁
+
+    # views.py
+    #   接收：帳號(Email)
+    #   接收：密碼
+    #   接收：使用者名稱
+    #   建立：新使用者
+
+
+    # user = User.objects.create_user("")
 
     return render(request, 'signup.html',locals())
 
@@ -23,6 +38,10 @@ def hello(request):
 
     # return HttpResponse('helloWorld')
     # return render(request, 'index.html', locals())
+
+def signupData(request):
+    return
+
 
 def logout(request):
     auth.logout(request)

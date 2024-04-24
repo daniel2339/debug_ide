@@ -2,6 +2,7 @@ from django.shortcuts import render , HttpResponse, HttpResponseRedirect
 from django.views.decorators.csrf import ensure_csrf_cookie
 from django.contrib import auth
 from django.contrib.auth.models import User
+from django.http.response import JsonResponse
 
 @ensure_csrf_cookie
 
@@ -40,7 +41,26 @@ def hello(request):
     # return render(request, 'index.html', locals())
 
 def signupData(request):
-    return
+    # 1.收到前端傳來的資料
+    # 2.建立使用者資料到DB
+    # 3.如果建立成功，回傳訊息至前端
+    # 4.如果建立失敗，回傳訊息至前端
+
+    username = request.POST.get('email','')
+    password = request.POST.get('password','')
+    email = request.POST.get('email','')
+    # 可加密碼檢查
+
+    # 可加傳入資料檢查
+
+    try:
+        user = User.objects.create_user(username,email,password)
+        user.save()
+
+        return JsonResponse({'msg':'ok'})
+    except Exception as e:
+        print(e)
+        return JsonResponse({'msg':'NOT OK'})
 
 
 def logout(request):

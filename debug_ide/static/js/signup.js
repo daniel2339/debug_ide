@@ -1,10 +1,12 @@
 
 
 
-const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]')
+const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value
 
 
 function signup(){
+
+    console.log(csrftoken)
 
     username = document.getElementById('username').value
     email = document.getElementById('email').value
@@ -26,13 +28,13 @@ function signup(){
         type  : "POST",
         async : true,
         accept: "application/json",
+        headers: {"X-CSRFToken" : csrftoken},
         data  : {
             'username' : username,
             'email' : email,
             'password' :password,
             'passwordcheck':passwordcheck
         },
-        headers: {"X-CSRFToken" : csrftoken},
         success: function (data, textStatus, jqXHR) {
             alert('註冊成功')
             window.location.replace("/debug_ide")

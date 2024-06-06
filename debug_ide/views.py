@@ -85,3 +85,13 @@ def login(request):
         return render(request, 'sign_in_up.html',locals())
 
     # return render(request,'sign_in_up.html',locals())
+
+def userFeedback(request):
+
+    feedback = request.POST.get('feedback','')
+
+    if request.user.is_authenticated:
+        return HttpResponse('OK')
+        print()
+    else:
+        return HttpResponse('helloWorld')

@@ -183,7 +183,7 @@
                 Launch static backdrop modal
             </button> -->
 
-
+            {% csrf_token %}
             <div class="item no-left-padding borderless">
                 <button class="ui primary labeled icon button" onclick="showmodal()">
                     <i class="play icon"></i>
@@ -208,6 +208,19 @@
                     <div class="ui button">確認更改</div>
                     <div class="ui button">維持現狀</div>
                 </div>
+                <hr>
+                <div class="header">
+                    feedback
+                </div>
+                <div class="ui form">
+                    <div class="field">
+                      <textarea rows = "2" id="feedback"></textarea>
+                    <div class="actions">
+                        <div class="ui button" onclick="sendFeedBack()">送出</div>
+                    </div>
+                    </div>
+                </div>
+
             </div>
 
             <div class="item no-left-padding borderless">

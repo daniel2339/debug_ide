@@ -1,3 +1,25 @@
+window.onload=function(e){
+    // passwordSave = document.getElementById('passwordSave').checked
+    //     sessionStorage.setItem('judgeIdePasswordSave',passwordSave)
+
+    // if(document.getElementById('passwordSave').checked){
+    //     email = document.getElementById('email').value
+    //     password = document.getElementById('password').value
+
+    email = sessionStorage.getItem('judgeIdeEmailTemp')
+    password = sessionStorage.getItem('judgeIdePasswordTemp')
+
+    sessionStorage.setItem('judgeIdeEmail',email)
+    sessionStorage.setItem('judgeIdePassword',password)
+    // }
+    // else{
+    //     sessionStorage.removeItem('judgeIdeEmail')
+    //     sessionStorage.removeItem('judgeIdePassword')
+    // }
+
+}
+
+
 const API_KEY = ""; // Get yours for free at https://judge0.com/ce and https://judge0.com/extra-ce
 
 const AUTH_HEADERS = API_KEY ? {
@@ -182,6 +204,29 @@ function showmodal() {
     $('#debug_modal')
         .modal('show')
         ;
+}
+
+function sendFeedBack(){
+    const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value
+    feedback = document.getElementById('feedback').value
+    $.ajax({
+        url   :"/debug_ide/userFeedback",
+        type  : "POST",
+        async : true,
+        accept: "application/json",
+        headers: {"X-CSRFToken" : csrftoken},
+        data  : {
+            'feedback' : feedback,
+        },
+        success: function (data, textStatus, jqXHR) {
+            alert('感謝回饋')
+        },
+        error: function(jqXHR,textStatus,errorThrown){
+            console.log(jqXHR)
+            console.log(textStatus)
+            console.log(errorThrown)
+        }
+    });
 }
 
 function logout(){

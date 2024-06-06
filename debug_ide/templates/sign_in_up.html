@@ -28,12 +28,18 @@
             <input type="password" name="password" id="password" placeholder="password" required>
             <!-- <i class='bx bxs-lock-alt'></i> -->
         </div>
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" value="" id="passwordSave">
+                <label class="form-check-label" for="passwordSave">
+                記住密碼
+                </label>
+        </div>
         <div class="forgot">
             <a href="#">註冊</a>
             <a href="#">忘記密碼</a>
         </div>
         <div class="login">
-            <button type="submit" class="btn btn-outline-primary">登入</button>
+            <button type="submit" class="btn btn-outline-primary" onclick="savePassword()">登入</button>
         </div>
         </form>
 
@@ -44,6 +50,50 @@
         integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
         crossorigin="anonymous"></script>
     <script src="../static/login.js" ></script>
+    <script>
+        document.getElementById('passwordSave').addEventListener('click',function(e){
+            console.log('PasswordSaveClicked')
+            console.log(e.target.checked)
+        })
+
+        function savePassword(){
+            passwordSave = document.getElementById('passwordSave').checked
+            sessionStorage.setItem('judgeIdePasswordSave',passwordSave)
+
+            if(document.getElementById('passwordSave').checked){
+                email = document.getElementById('email').value
+                password = document.getElementById('password').value
+                sessionStorage.setItem('judgeIdeEmailTemp',email)
+                sessionStorage.setItem('judgeIdePasswordTemp',password)
+            }
+            else{
+                sessionStorage.removeItem('judgeIdeEmail')
+                sessionStorage.removeItem('judgeIdePassword')
+            }
+        }
+
+        window.onload=function(e){
+            email=sessionStorage.getItem('judgeIdeEmail')
+            password = sessionStorage.getItem('judgeIdePassword')
+
+            
+            passwordSave=sessionStorage.getItem('judgeIdePasswordSave')
+            if(passwordSave == 'true'){
+                document.getElementById('passwordSave').checked = true
+            }else{
+                document.getElementById('passwordSave').checked = flase
+            }
+
+
+            if(email != null){
+                document.getElementById('email').vale =email
+            }
+            if(password !=null){
+                document.getElementById('password').vale =password
+            }
+
+        }
+    </script>
 </body>
 
 </html>

@@ -3,7 +3,15 @@ from django.views.decorators.csrf import ensure_csrf_cookie
 from django.contrib import auth
 from django.contrib.auth.models import User
 from django.http.response import JsonResponse
-
+from django.views.decorators.csrf import csrf_exempt
+import json
+import openai
+from django.conf import settings
+from django.http import JsonResponse
+import os
+import logging
+openai.api_key = settings.OPENAI_API_KEY
+logger = logging.getLogger(__name__)
 @ensure_csrf_cookie
 
 # Create your views here.
@@ -95,3 +103,40 @@ def userFeedback(request):
         print()
     else:
         return HttpResponse('helloWorld')
+
+@csrf_exempt
+def debug_code(request):
+    if request.method == "POST":
+        try:
+            # 從請求正文中獲取 JSON 數據
+            body = json.loads(request.body)
+            code = body.get("code")
+
+            if not code:
+                return JsonResponse({"error": "No code provided"}, status=400)
+
+            # 將收到的代碼寫入文件
+            with open("user_code.json", "w") as file:
+                json.dump(body, file, indent=4)
+
+            # 使用 OpenAI API 發送請求
+            response = openai.ChatCompletion.create(
+                model="gpt-3.5-turbo",
+                messages=[
+                    {"role": "system", "content": "你是一個程式碼偵錯助手。"},
+                    {"role": "user", "content": f"請幫我偵錯這段代碼:\n\n{code}"}
+                ],
+                max_tokens=200,
+                temperature=0.5
+            )
+
+            # 將 OpenAI 回應也寫入文件
+            with open("openai_response.json", "w") as file:
+                json.dump(response, file, indent=4)
+
+            # 獲取回應文本
+            reply = response['choices'][0]['message']['content'].strip()
+            return JsonResponse({"reply": reply})
+        except Exception as e:
+            return JsonResponse({"error": str(e)}, status=500)
+    return JsonResponse({"error": "Invalid request method"}, status=400)

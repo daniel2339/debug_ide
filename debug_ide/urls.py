@@ -26,5 +26,6 @@ urlpatterns = [
     path('logout',views.logout),
     path('signup',views.signup),
     path('signupData',views.signupData),
-    path('userFeedback',views.userFeedback)
+    path('userFeedback',views.userFeedback),
+    path('api/debug/', views.debug_code, name='debug_code'),
 ]+static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

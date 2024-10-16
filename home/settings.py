@@ -127,3 +127,6 @@ mimetypes.add_type("text/css", ".css", True)
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+OPENAI_API_KEY = "sk-ewqwtXEvRby0T49XaLwhZWHzrXZzu1LYYxhXefXXL_T3BlbkFJHKkRWEEj6XyHpLP1-F6ntOfvBuHp0_097xizW-xVAA"
+DEBUG = os.getenv('DEBUG', 'True') == 'True'

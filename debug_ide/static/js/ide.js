@@ -201,9 +201,28 @@ function downloadSource() {
 //     ;
 
 function showmodal() {
-    $('#debug_modal')
-        .modal('show')
-        ;
+
+    $.ajax({
+        url   :"/debug_ide/signupData",
+        type  : "POST",
+        async : true,
+        accept: "application/json",
+        headers: {"X-CSRFToken" : csrftoken},
+        data  : {
+            'username' : username,
+            'email' : email,
+            'password' :password,
+            'passwordcheck':passwordcheck
+        },
+        success: function (data, textStatus, jqXHR) {
+            alert('註冊成功')
+            window.location.replace("/debug_ide")
+            $('#debug_modal').modal('show');
+        },
+        error: function(){
+            alert('註冊失敗')
+        }
+    });
 }
 
 function sendFeedBack(){
@@ -1303,3 +1322,65 @@ var competitiveProgrammingCompilerOptions = "-O3 --std=c++17 -Wall -Wextra -Wold
 var compilerOptions = {
     54: competitiveProgrammingCompilerOptions
 }
+
+let debugReply = ""; // 全域變數，用於保存偵錯結果
+
+function showmodal() {
+    const code = sourceEditor.getValue(); // 從 Monaco Editor 獲取代碼
+    const csrftoken = document.getElementById('csrf_token').value; // 獲取 CSRF Token
+
+    if (!code.trim()) {
+        showError("Error", "代碼不能為空！");
+        return;
+    }
+
+    console.log("Sending code for debugging:", code);
+
+
+    // 發送偵錯請求到後端
+    fetch("/debug_ide/api/debug/", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+            "X-CSRFToken": csrftoken
+        },
+        body: JSON.stringify({ code })
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+        return response.json();
+    })
+    .then(data => {
+        if (data.reply) {
+            debugReply = data.reply; // 保存偵錯結果
+
+            // 更新模態框中的描述內容為偵錯結果
+            const descriptionElement = document.querySelector("#debug-description");
+            descriptionElement.textContent = debugReply;
+
+            // 顯示模態框
+            $('#debug_modal').modal('show');
+        } else {
+            showError("偵錯失敗", "未能獲取偵錯結果，請稍後再試。");
+        }
+    })
+    .catch(error => {
+        console.error("偵錯時發生錯誤:", error);
+        showError("偵錯失敗", "請檢查網絡連線或稍後再試。");
+    });
+}
+
+// 處理“確認更改”按鈕點擊事件
+document.getElementById("confirm-change-btn").addEventListener("click", () => {
+    if (debugReply) {
+        sourceEditor.setValue(debugReply); // 將偵錯結果更新到 Monaco Editor 中
+    }
+
+    // 隱藏模態框
+    $('#debug_modal').modal('hide');
+});
+
+
+

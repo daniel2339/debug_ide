@@ -185,13 +185,14 @@
 
             {% csrf_token %}
             <div class="item no-left-padding borderless">
+                <input type="hidden" id="csrf_token" name="csrfmiddlewaretoken" value="{{ csrf_token }}">
                 <button class="ui primary labeled icon button" onclick="showmodal()">
                     <i class="play icon"></i>
                     <span id="run-btn-label">偵錯</span>
                 </button>
             </div>
 
-            <div class="ui modal" id="debug_modal">
+            <!-- <div class="ui modal" id="debug_modal">
                 <i class="close icon"></i>
                 <div class="header">
                     除錯結果
@@ -211,8 +212,8 @@
                 <hr>
                 <div class="header">
                     feedback
-                </div>
-                <div class="ui form">
+                </div> -->
+                <!-- <div class="ui form">
                     <div class="field">
                       <textarea rows = "2" id="feedback"></textarea>
                     <div class="actions">
@@ -221,7 +222,26 @@
                     </div>
                 </div>
 
+            </div> -->
+            <div class="ui modal" id="debug_modal">
+                <i class="close icon"></i>
+                <div class="header">除錯結果</div>
+                <div class="image content">
+                    <div class="image">
+                        <img src="../static/images/remove.png" alt="cross" width="30px">
+                    </div>
+                    <div class="description" id="debug-description">
+                        報錯內容
+                    </div>
+                </div>
+                <div class="actions">
+                    <div class="ui button" id="confirm-change-btn">確認更改</div>
+                    <div class="ui button">維持現狀</div>
+                </div>
             </div>
+
+
+
 
             <div class="item no-left-padding borderless">
                 <div class="ui buttons">

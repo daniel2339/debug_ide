@@ -28,6 +28,7 @@ SECRET_KEY = 'django-insecure-egwf%#x-k9t7c+sx3lie$6-sraj6$+!wgm51y^i5^8z3kt4gw*
 DEBUG = True
 
 ALLOWED_HOSTS = []
+APPEND_SLASH = False
 
 
 # Application definition
@@ -128,5 +129,6 @@ mimetypes.add_type("text/css", ".css", True)
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-OPENAI_API_KEY = "sk-ewqwtXEvRby0T49XaLwhZWHzrXZzu1LYYxhXefXXL_T3BlbkFJHKkRWEEj6XyHpLP1-F6ntOfvBuHp0_097xizW-xVAA"
+OPENAI_API_KEY = "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"
+# OPENAI_API_KEY = "sk-iAbRP1Y-3F5jpgpKM1qwIyzOQN6J8BRsZinDbmt2n0T3BlbkFJVF7wSwTq0EAOJMg6IG0tLuX0_iLA4ScuOcEJ5-AEAA"
 DEBUG = os.getenv('DEBUG', 'True') == 'True'

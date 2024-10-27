@@ -54,7 +54,7 @@ def signupData(request):
     # 3.如果建立成功，回傳訊息至前端
     # 4.如果建立失敗，回傳訊息至前端
 
-    username = request.POST.get('email','')
+    username = request.POST.get('username','')
     password = request.POST.get('password','')
     email = request.POST.get('email','')
     # 可加密碼檢查
@@ -104,69 +104,6 @@ def userFeedback(request):
     else:
         return HttpResponse('helloWorld')
 
-@csrf_exempt
-# def debug_code(request):
-#     if request.method == "POST":
-#         try:
-#             # 從請求正文中獲取 JSON 數據
-#             body = json.loads(request.body)
-#             code = body.get("code")
-
-#             if not code:
-#                 return JsonResponse({"error": "No code provided"}, status=400)
-
-#             # 將收到的代碼寫入文件
-#             with open("user_code.json", "w") as file:
-#                 json.dump(body, file, indent=4)
-
-#             # 使用 OpenAI API 發送請求
-#             response = openai.ChatCompletion.create(
-#                 model="gpt-3.5-turbo",
-#                 messages=[
-#                     {"role": "system", "content": "你是一個程式碼偵錯助手。"},
-#                     {"role": "user", "content": f"請幫我偵錯這段代碼:\n\n{code}"}
-#                 ],
-#                 max_tokens=200,
-#                 temperature=0.5
-#             )
-
-#             # 將 OpenAI 回應也寫入文件
-#             with open("openai_response.json", "w") as file:
-#                 json.dump(response, file, indent=4)
-
-#             # 獲取回應文本
-#             reply = response['choices'][0]['message']['content'].strip()
-#             return JsonResponse({"reply": reply})
-#         except Exception as e:
-#             return JsonResponse({"error": str(e)}, status=500)
-#     return JsonResponse({"error": "Invalid request method"}, status=400)
-
-# def debug_code(request):
-#     if request.method == "POST":
-#         try:
-#             body = json.loads(request.body)
-#             code = body.get("code")
-
-#             if not code:
-#                 return JsonResponse({"error": "No code provided"}, status=400)
-
-#             # 使用新版 OpenAI API
-#             response = openai.ChatCompletion.create(
-#                 model="gpt-3.5-turbo",
-#                 messages=[
-#                     {"role": "system", "content": "你是一個程式碼偵錯助手。"},
-#                     {"role": "user", "content": f"請幫我偵錯這段代碼:\n\n{code}"}
-#                 ],
-#                 max_tokens=200,
-#                 temperature=0.5
-#             )
-
-#             reply = response.choices[0].message['content'].strip()
-#             return JsonResponse({"reply": reply})
-#         except Exception as e:
-#             print(f"Error occurred while processing the debug request: {str(e)}")
-#             return JsonResponse({"error": str(e)}, status=500)
-#     return JsonResponse({"error": "Invalid request method"}, status=400)
 
 @csrf_exempt
 def debug_code(request):
@@ -184,13 +121,14 @@ def debug_code(request):
                     model="gpt-3.5-turbo",
                     messages=[
                         {"role": "system", "content": "你是一個程式碼偵錯助手。"},
-                        {"role": "user", "content": f"請幫我偵錯這段代碼:\n\n{code}"}
+                        {"role": "user", "content": f"只需要回覆我修正後的程式碼並排版完整，不需任何說明:\n\n{code}"}
                     ],
                     max_tokens=200,
                     temperature=0.5
                 )
+                print(response)
 
-                reply = response.choices[0].message['content'].strip()
+                reply = response.choices[0].message['content'].replace("\n","|") #.strip()
                 return JsonResponse({"reply": reply})
             except openai.error.OpenAIError as api_error:
                 # 如果 API 發生錯誤（例如配額不足），返回模擬的回應

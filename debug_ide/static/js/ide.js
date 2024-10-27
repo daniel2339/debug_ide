@@ -20,7 +20,7 @@ window.onload=function(e){
 }
 
 
-const API_KEY = ""; // Get yours for free at https://judge0.com/ce and https://judge0.com/extra-ce
+const API_KEY = "84d8eff2e6msh1297a6178ed28d7p1f580bjsne3095af16bed"; // Get yours for free at https://judge0.com/ce and https://judge0.com/extra-ce
 
 const AUTH_HEADERS = API_KEY ? {
     "X-RapidAPI-Key": API_KEY

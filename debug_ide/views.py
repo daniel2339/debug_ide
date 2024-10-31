@@ -18,20 +18,6 @@ logger = logging.getLogger(__name__)
 
 def signup(request):
 
-    #Html / Javascript
-    #   確認：使用者名稱
-    #   確認：密碼一致
-    #   確認：Email
-    #   確認：同意條款
-    #   ajax送出：註冊資料
-    #   跳轉：登入頁
-
-    # views.py
-    #   接收：帳號(Email)
-    #   接收：密碼
-    #   接收：使用者名稱
-    #   建立：新使用者
-
 
     # user = User.objects.create_user("")
 
@@ -94,49 +80,61 @@ def login(request):
 
     # return render(request,'sign_in_up.html',locals())
 
-def userFeedback(request):
+# def userFeedback(request):
 
-    feedback = request.POST.get('feedback','')
+#     feedback = request.POST.get('feedback','')
 
-    if request.user.is_authenticated:
-        return HttpResponse('OK')
-        print()
-    else:
-        return HttpResponse('helloWorld')
+#     if request.user.is_authenticated:
+#         return HttpResponse('OK')
+#         print()
+#     else:
+#         return HttpResponse('helloWorld')
 
+
+
+def question(request):
+    return render(request, 'question.html')
 
 @csrf_exempt
 def debug_code(request):
     if request.method == "POST":
         try:
             body = json.loads(request.body)
-            code = body.get("code")
+            content = body.get("code")
+            request_type = body.get("type", "general")
 
-            if not code:
-                return JsonResponse({"error": "No code provided"}, status=400)
+            if not content:
+                return JsonResponse({"error": "No content provided"}, status=400)
 
-            try:
-                # 使用新版 OpenAI API
-                response = openai.ChatCompletion.create(
-                    model="gpt-3.5-turbo",
-                    messages=[
-                        {"role": "system", "content": "你是一個程式碼偵錯助手。"},
-                        {"role": "user", "content": f"只需要回覆我修正後的程式碼並排版完整，不需任何說明:\n\n{code}"}
-                    ],
-                    max_tokens=200,
-                    temperature=0.5
-                )
-                print(response)
+            if request_type == "code":
+                prompt = f"只需要回覆我修正後的程式碼並排版完整，只要code不用任何說明 這段文字:\n\n{content}"
+            elif request_type == "general":
+                prompt = f"這是使用者的代碼及相關問題，請根據這些資訊回答問題，只需回覆錯誤的那行就好：\n\n{content}"
+            else:
+                prompt = content
 
-                reply = response.choices[0].message['content'].replace("\n","|") #.strip()
-                return JsonResponse({"reply": reply})
-            except openai.error.OpenAIError as api_error:
-                # 如果 API 發生錯誤（例如配額不足），返回模擬的回應
-                print(f"OpenAI API error: {str(api_error)}")
-                reply = "這是模擬的回應，因為 API 配額已用完。"
-                return JsonResponse({"reply": reply})
+            # 使用 OpenAI API 回答問題
+            response = openai.ChatCompletion.create(
+                model="gpt-3.5-turbo",
+                messages=[
+                    {"role": "system", "content": "你是一個程式碼偵錯助手。" if request_type == "code" else "你是一個全能助理。"},
+                    {"role": "user", "content": prompt}
+                ],
+                max_tokens=200,
+                temperature=0.5
+            )
+
+            reply = response.choices[0].message['content'].strip()
+            return JsonResponse({"reply": reply})
+
+        except openai.error.OpenAIError as api_error:
+            # 處理 OpenAI API 相關的錯誤
+            print(f"OpenAI API error: {str(api_error)}")
+            return JsonResponse({"reply": "這是模擬的回應，因為 API 配額已用完。"})
+
         except Exception as e:
             # 捕捉其他一般錯誤
-            print(f"Error occurred while processing the debug request: {str(e)}")
+            print(f"Error occurred while processing the request: {str(e)}")
             return JsonResponse({"error": str(e)}, status=500)
+
     return JsonResponse({"error": "Invalid request method"}, status=400)

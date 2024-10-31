@@ -1,0 +1,144 @@
+[
+    {
+		"id": 1,
+		"title": "UVA100",
+		"content": "考慮以下的演算法：\n\n1. 輸入 n\n2. 印出 n\n3. 如果 n = 1 結束\n4. 如果 n 是奇數，那麼 n = 3 * n + 1\n5. 否則 n = n / 2\n6. 回到步驟 2\n\n例如，輸入 22，得到的數列：22 11 34 17 52 26 13 40 20 10 5 16 8 4 2 1 \n\n據推測，這個演算法對任何整數都會終止（當列印出 1 的時候）。雖然這個演算法很簡單，但該推測是否真實無法得知。然而對於所有 0 < n < 1,000,000 的整數，此推測已被驗證為正確。\n\n給一個輸入 n ，透過這個演算法我們可以得到一個數列（1 作為結尾）。這個數列的長度稱為 n 的 cycle-length。在上面例子中，22 的 cycle length 為 16。\n\n問題：給定任意兩個整數 i 和 j，我們想知道介於 i 和 j 之間（包含 i 和 j）的數所產生的數列中最大的 cycle length 是多少。\n\n輸入:\n輸入可能包含多行測試數據，每行包含一對整數 i 和 j，其中 0 < i, j < 1,000,000。\n\n範例輸入:\n1 10\n10 1\n100 200\n201 210\n900 1000\n\n輸出:\n對於每對輸入 i 和 j，輸出 i、j 和介於 i、j 之間的數所產生的數列中最大的 cycle length。\n\n範例輸出:\n1 10 20\n10 1 20\n100 200 125\n201 210 89\n900 1000 174\n",
+		"difficulty": "one_star"
+	},
+	
+	{
+		"id": 2,
+		"title": "UVA272",
+		"content": "TeX 是一種由 Donald Knuth 所發展出的一套文書排版軟體。這套軟體可以將原始文件檔加上一些像字型等型態後，轉成一份很漂亮的文件。而一份漂亮的文件是需要用 `` 和 '' 來把別人說的話給「引」出來，而不是用大部份鍵盤上有的 \" 。雖然鍵盤裡通常不會有這種有方向的雙引號鍵，不過上面有左單引號 ` （有人叫 backquote ），和右單引號 ' （有人叫 apostrophe 或 quote ）。你可以在你的鍵盤上找一下，不過要小心不要將 ` 與 \\ （ backslash 鍵）搞混了。而在 TeX 裡，使用者可以輸入兩個左單引號 `` 來構成一個左雙引號 `` ，或者是兩個右單引號 '' 來構造一個右單引號 '' ，不過呢，通常大家打字時都很習慣用普通的雙引號 \" 來引述別人的話。\n如果原始文件檔內容是：\n\"To be or not to be,\" quoth the bard, \"that is the question.\"\n則 TeX 作出來的文件並不會是我們所想要的：\n``To be or not to be,\" quoth the bard, ``that is the question.\"\n為了要得到上面的文件，我們需要把原始文件變成這個樣子：\n``To be or not to be,'' quoth the bard, ``that is the question.''\n你現在必須要寫一個程式，將普通的雙引號（\"），轉成有方向性的雙引號，而其它文字則不變。而在把普通的雙引號換掉的時候，要特別注意，當要開始引述一句話時要用 `` ，而結束引述時要用 '' 。不用擔心會有多層巢狀引號的情形，也就是第一個引號一定是用 `` 來代替，再來用 ''，然後用 `` ，接著用 '' ，依此類推。\n\n輸入:\n輸入是若干列的文字，其中有偶數個雙引號（ \" ），以 end-of-file 做結束。輸出的文字必須和輸入的一模一樣，除了：\n* 每一組雙引號的第一個 \" 必須用兩個 ` 字元（就是 `` ）來代替\n* 每一組雙引號的第二個 \" 必須用兩個 ' 字元（ 就是 ''）來代替。\n\n範例輸入:\n\"To be or not to be,\" quoth the Bard, \"that is the question\".\n\nThe programming contestant replied: \"I must disagree.To `C' or not to `C', that is The Question!\"\n\n輸出:\n同上\n\n範例輸出:\n``To be or not to be,'' quoth the Bard, ``that is the question''.\n\nThe programming contestant replied: ``I must disagree.To `C' or not to `C', that is The Question!''\n",
+		"difficulty": "one_star"
+	},
+	{
+    "id": 3,
+    "title": "UVA10071",
+    "content": "某一個粒子有一初速度和等加速度。假設在 t 秒後此粒子的速度為 v ，請問這個粒子在 2t 秒後所經過的位移是多少。\n輸入:\n每組測試資料1列，有2個整數，分別代表 v（-100 <= v <=100）和 t（0 <= t <= 200）。\n\n範例輸入:\n0 0\n5 12\n\n輸出:\n對每組測試資料請輸出這個粒子在 2t 秒後所經過的位移是多少。\n\n範例輸出:\n0\n120\n",
+    "difficulty": "one_star"
+	},
+
+	{
+        "id": 4,
+        "title": "UVA10235",
+        "content": " 一個比 1 大的整數如果只有 1 和他本身自己共 2 個因數，我們稱這個數為質數（prime number）。多年來質數一直被數學家們研究著。質數也常被應用在密碼學和編碼理論中。\n\t\t\t\t\t那麼你曾經把質數倒轉過來嗎？對大部分的質數來說，你將會得到一個組合數（例如：43 變成 34）現在，我們要定義 Emirp（就是把 Prime 反過來拼）：如果你把一個質數反過來之後，\n\t\t\t\t\t他仍然是一個質數，並且和原來那個質數不同，那我們就稱這個數為 emirp number。例如：17 是一個emirp，因為 17 和 71 都是質數。在這個問題中，你必須要決定某一個整數 N 是非質數，\n\t\t\t\t\t質數，或 emirp。你可以假設 1<N<1000000。\n\n\t\t\t\t\t輸入:\n\t\t\t\t\t輸入的每一行測試資料有 1 個整數 N\n\n\t\t\t\t\t範例輸入:\n\t\t\t\t\t17\n\t\t\t\t\t18\n\t\t\t\t\t19\n\t\t\t\t\t179\n\t\t\t\t\t199\n\t\t\t\t\t131\n\n\t\t\t\t\t輸出:\n\t\t\t\t\t對每一輸入 N，輸出以下的訊息：\n\t\t\t\t\t1. \"N is not prime.\"，如果 N 不是一個質數\n\t\t\t\t\t2. \"N is prime.\"，如果 N 是一個質數，但是不是一個 Emirp\n\t\t\t\t\t3. \"N is emirp.\"，如果 N 是一個 emirp\n\t\n\t\t\t\t\t範例輸出 :\n\t\t\t\t\t17 is emirp.\n\t\t\t\t\t18 is not prime.\n\t\t\t\t\t19 is prime.\n\t\t\t\t\t179 is emirp.\n\t\t\t\t\t199 is emirp.\n\t\t\t\t\t131 is prime.\n\t",
+        "difficulty": "one_star"
+    },
+	{
+		"id": 5,
+		"title": "UVA10420",
+		"content": "在第一幕中，勒波雷洛正在告訴唐娜·艾爾維拉他主人眾多的情史：\"這是我主人愛過的美女名單，是我自己整理的：來看看，和我一起讀。\n意大利六百四十名，德國二百三十一名，法國一百名，土耳其九十一名；但在西班牙已經是一千零三名！其中有鄉村女孩、女僕、城市美人；還有伯爵夫人、男爵夫人、侯爵夫人、公主演；各種身份、各種身材、各種年齡的女人。\"（親愛的女士，這就是名單） 當勒波雷洛依次記錄下唐·喬瓦尼的“愛情”時，他發現向他人展示主人征服的名單非常麻煩，因為每次都需要按國籍統計“美女”的數量。你要幫助勒波雷洛進行計數。\n\n輸入:\n輸入最多包含2000行，但第一行是特例。第一行包含一個數字n，表示接下來會有n行。每一行最多75個字符，包含一個國家（第一個單詞）和一位女性的名字（後面的單詞），是唐·喬瓦尼愛過的女人。你可以假設所有國家的名字都只有一個單詞。\n\n範例輸入:\n3\nSpain Donna Elvira\nEngland Jane Doe\nSpain Donna Anna\n\n輸出:\n輸出由按字母順序排列的行組成。每行以國家的名字開頭，後面是唐·喬瓦尼在該國愛過的女性總數，兩者之間用空格分隔。\n\n範例輸出:\nEngland 1\nSpain 2\n",
+		"difficulty": "one_star"
+	},
+	{
+        "id": 6,
+        "title": "UVA10783",
+        "content": "給你一個範圍 a 到 b ，請你找出 a 與 b 之間所有奇數的和。\n\t\t\t\t\t例如：範圍 [3, 9] 中所有奇數的和就是 3 + 5 + 7 + 9 = 24 。\n\n\n\t\t\t\t\t輸入:\n\t\t\t\t\t輸入的第一列有一個整數 T （1≦T≦100），代表以下有多少組測試資料。 每組測試資料為兩列，包含兩個數 a 與 b （0≦a≦b≦100）。\n\n\t\t\t\t\t範例輸入:\n\t\t\t\t\t2\n\t\t\t\t\t1\n\t\t\t\t\t5\n\t\t\t\t\t3\n\t\t\t\t\t5\n\n\t\t\t\t\t輸出:\n\t\t\t\t\t每組測試資料輸出一列，內容為 a 及 b 間所有奇數的和。\n\t\t\t\n\t\t\t\t\t範例輸出 :\n\t\t\t\t\tCase 1: 9\n\t\t\t\t\tCase 2: 8\t\t\t\t\t\n\t\t",
+        "difficulty": "one_star"
+    },
+	{
+        "id": 7,
+        "title": "UVA10812",
+        "content": "超級盃又來了，為了打發中場休息時間，大家就來下注最後的結果會如何。大家下注的目標為兩隊最後的分數和，或者兩隊最後分數差的絕對值。\n\t\t\t\t\t給你這2個值，你能推出這2隊最後的得分是多少嗎？\n\n\t\t\t\t\t輸入:\n\t\t\t\t\t輸入的第一列有一個整數，代表以下有多少組測試資料。 每組測試資料一列，有2個大於等於 0 的整數 s, d，s 代表比賽結束時2隊分數的總和， d 代表比賽結束時2隊分數差的絕對值。\n\n\t\t\t\t\t範例輸入:\n\t\t\t\t\t4\n\t\t\t\t\t40 20\n\t\t\t\t\t20 40\n\t\t\t\t\t5 1\n\t\t\t\t\t100 1\n\n\t\t\t\t\t輸出:\n\t\t\t\t\t對每組測試資料輸出一列，包含2個整數代表比賽結束時這2隊的分數，分數大的在前。如果沒有這樣的分數，請輸出「 impossible」。 請記得：美式足球的分數一定是大於等於 0 的整數。\n\t\n\t\t\t\t\t範例輸出 :\n\t\t\t\t\t30 10\n\t\t\t\t\timpossible\n\t\t\t\t\t3 2\n\t\t\t\t\timpossible\n\t\t\n\t\t",
+        "difficulty": "one_star"
+    },
+	{
+        "id": 8,
+        "title": "UVA10929",
+        "content": "你的任務是，給你一個正整數 N，判定它是否是 11 的倍數。\n\t\t\t\t\t輸入:\n\t\t\t\t\t每列資料有一個正整數N，N 最大可能到 1000 位數。\n\t\t\t\t\t若 N = 0 代表輸入結束\n\n\t\t\t\t\t範例輸入:\n\t\t\t\t\t112233\n\t\t\t\t\t30800\n\t\t\t\t\t2937\n\t\t\t\t\t323455693\n\t\t\t\t\t5038297\n\t\t\t\t\t112234\n\t\t\t\t\t0\n\n\n\t\t\t\t\t輸出:\n\t\t\t\t\t對每個輸入的數，輸出是否為 11 的倍數。輸出格式請參考 Sample Output。\t\n\n\t\t\t\t\t範例輸出 :\n\t\t\t\t\t112233 is a multiple of 11.\n\t\t\t\t\t30800 is a multiple of 11.\n\t\t\t\t\t2937 is a multiple of 11.\n\t\t\t\t\t323455693 is a multiple of 11.\n\t\t\t\t\t5038297 is a multiple of 11.\n\t\t\t\t\t112234 is not a multiple of 11.\n\n\t\t",
+        "difficulty": "one_star"
+    },
+	{
+		"id": 9,
+		"title": "UVA10222",
+		"content": "BUET大學有一位老教授就發瘋了。他開始說一些奇怪的話。沒有人能夠聽得懂他的上課內容。\n最終，BUET大學陷入了難題。無法讓這位老教授繼續在大學教書。\n突然有一位學生(肯定是UVA ACM章節的註冊作者，並且在online judge排名很高)創造了一個可以將教授說的話解碼的程式。\n在此之後，老教授又繼續正常的教書，每個人都感到很開心。\n因此，如果你有機會參訪BUET大學，並且看到一位老師正在用裝有語音辨識麥克風講話，你可別嚇到。\n因為現在你的工作就是寫相同的程式來解碼瘋狂老教授的語言。\n輸入:\n輸入僅包含一筆測試資料，也就是編碼後的訊息。\n這筆測試資料包含一個或多個單字。\n字母皆為小寫。\n範例輸入:\nk[r dyt i[o\np '[nt ]y[jyd.\n輸出:\n根據測試資料，輸出解碼後的單字。\n還好，這工作並不難，只要把每個字母或符號以鍵盤上它左邊第二個鍵的符號來取代就行了。\n不會有不合理的情況，比方說編碼訊息為a，但是a在鍵盤上沒有左邊。\n空白和換行請直接輸出。\n範例輸出:\nhow are you\ni love program",
+		"difficulty": "one_star"
+	}
+	,
+	{
+        "id": 10,
+        "title": "UVA10252",
+        "content": "給定兩個由小寫字母組成的字串a和b。\n\t\t\t\t\t印出最長的小寫字串x，使得x經過重新排列後為a的子序列，且x經過重新排列後為b的子序列。\n\t\t\t\t\t輸入:\n\t\t\t\t\t\t輸入包含多行輸入。\n\t\t\t\t\t連續的兩行為一組，第一行為字串a，第二行為字串b\n\t\t\t\t\t1~2行為一組輸入，3~4行為一組輸入，依此類推。\n\t\t\t\t\t每個字串最多包涵1000個小寫字母。\n\t\t\t\t\t範例輸入:\n\t\t\t\t\t\tpretty\n\t\t\t\t\t\twomen\n\t\t\t\t\t\twalking\n\t\t\t\t\t\tdown\n\t\t\t\t\t\tthe\n\t\t\t\t\t\tstreet\n\t\t\t\t\t輸出:\n\t\t\t\t\t對於每組輸入，輸出本題要求a和b的x\n\t\t\t\t\t如果有多組符合的x\n\t\t\t\t\t請印出字母順序由小到大排列的那一個。\n\t\t\t\t\t範例輸出 :\n\t\t\t\t\t\te\n\t\t\t\t\t\tnw\n\t\t\t\t\t\tet\t\n\t\t\n\t\t",
+        "difficulty": "one_star"
+    },
+    {
+        "id": 11,
+        "title": "UVA612",
+        "content": " 在一個序列中，\"unsortedness\"是一種度量方式。\n\t\t\t\t\t例如，在字母序列\"DAABEC\"中，因為在D的右側D比四個字母大，E的右側E比一個字母大，所以此度量為5。\n\t\t\t\t\t該度量稱為序列的反轉數。\n\t\t\t\t\t像是序列\"AACEDGG\"反轉數為1(幾乎已排序)。\n\t\t\t\t\t而序列\"ZWQM\"反轉數為6(幾乎未排序)。\n\t\t\t\t\t您負責對DNA字串序列進行分類。\n\t\t\t\t\t但是，您不希望按字母順序對它們進行分類，而要按\"sortedness\"的順序對它們進行分類\n\t\t\t\t\t並且從\"sortedness\"到\"unsortedness\"(反轉數小到反轉數大)。\n\n\t\t\t\t\t輸入:\n\t\t\t\t\t輸入的第一行有一個整數T，T代表有幾組測資。\n\t\t\t\t\t每組測資開頭有一個空白行。\n\t\t\t\t\t接下來一行包含兩個整數n (0 < n ≤ 50)和m (0 < m ≤ 100)，n代表字串長度，m代表字串數量。\n\t\t\t\t\t接下來是m行長度為n的字串。\n\t\t\t\t\t測資中字串只包含大寫英文字母。\n\n\t\t\t\t\t範例輸入:\n\t\t\t\t\t1\n\n\t\t\t\t\t10 6\n\t\t\t\t\tAACATGAAGG\n\t\t\t\t\tTTTTGGCCAA\n\t\t\t\t\tTTTGGCCAAA\n\t\t\t\t\tGATCAGATTT\n\t\t\t\t\tCCCGGGGGGA\n\t\t\t\t\tATCGATGCAT\n\n\t\t\t\t\t輸出:\n\t\t\t\t\t對於每組測資，輸出字串的列表，從\"sortedness\"到\"unsortedness\"。\n\t\t\t\t\t如果兩個或兩個以上的字串反轉數相同，請以與輸入順序排序。\n\t\t\t\t\t在連續的測資之間以空白行分隔。\t\n\t\n\t\t\t\t\t範例輸出 :\n\t\t\t\t\tCCCGGGGGGA\n\t\t\t\t\tAACATGAAGG\n\t\t\t\t\tGATCAGATTT\n\t\t\t\t\tATCGATGCAT\n\t\t\t\t\tTTTTGGCCAA\n\t\t\t\t\tTTTGGCCAAA\n\t\t",
+        "difficulty": "two_star"
+    },
+	{
+        "id": 12,
+        "title": "UVA10020",
+        "content": "給定多組線段坐標[Li, Ri]，[Li, Ri](在X軸上)。\n\t\t\t\t\t請選擇最少數量的線段，使得選擇的線段完全覆蓋[0, M]。\n\n\t\t\t\t\t輸入:\n\t\t\t\t\t第一行有一個整數T，T代表測資的數量。\n\t\t\t\t\t每組測資第一行為一空白行。\n\t\t\t\t\t第二行為一整數M (1 ≤ M ≤ 5000)，M如題目所示。\n\t\t\t\t\t接下來有多行，每行兩個整數Li, Ri\n\t\t\t\t\t(|Li|, |Ri| ≤ 50000，i ≤ 100000)。\n\t\t\t\t\t如果Li = Ri = 0代表此測資結束。\n\n\t\t\t\t\t範例輸入:\n\t\t\t\t\t2\n\n\t\t\t\t\t1\n\t\t\t\t\t-1 0\n\t\t\t\t\t-5 -3\n\t\t\t\t\t2 5\n\t\t\t\t\t0 0\n\n\t\t\t\t\t1\n\t\t\t\t\t-1 0\n\t\t\t\t\t0 1\n\t\t\t\t\t0 0\n\n\t\t\t\t\t輸出:\n\t\t\t\t\t對於每組測資，第一行輸出最少需要選擇多少線段，用來覆蓋[0, M]。\n\t\t\t\t\t接下來多行，輸出選擇的線段座標(按照Li排序)\n\t\t\t\t\t如果給定的線段不能覆蓋[0, M]，則輸出\"0\"。\n\t\t\t\t\t在兩個連續的測資之間用空白行隔開。\n\t\n\t\t\t\t\t範例輸出 :\n\t\t\t\t\t0\t\n\n\t\t\t\t\t1\n\t\t\t\t\t0 1\n\t\n\t\t",
+        "difficulty": "two_star"
+    },
+	{
+        "id": 13,
+        "title": "UVA10106",
+        "content": "這個問題是請你做2個整數 X, Y相乘（0 <= X,Y < 10250）\n\t\t\t\t\t輸入:\n\t\t\t\t\t每組測試資料 2 列\n\t\t\t\t\t各有 1 個整數\n\t\t\t\t\t分別代表 X 和 Y\n\n\t\t\t\t\t範例輸入:\n\t\t\t\t\t12\n\t\t\t\t\t12\n\t\t\t\t\t2\n\t\t\t\t\t222222222222222222222222\n\n\n\t\t\t\t\t輸出:\n\t\t\t\t\t對每組測試資料請輸出 X*Y 的結果\n\t\n\t\t\t\t\t範例輸出 :\n\t\t\t\t\t144\n\t\t\t\t\t444444444444444444444444\t\t\n\t\t",
+        "difficulty": "two_star"
+    },
+	{
+        "id": 14,
+        "title": "UVA10107",
+        "content": "在統計學的世界中，中間數（median）扮演一個重要的角色。 根據定義：中間數就是在一連串已由小到大排序的數字中，排在中間的\n\t\t\t\t\t那一個數。例如：在{1,3,4,9,11}中4就是中間數。萬一有偶數個數字，我們定 義中間數就是位於中間的那2個數的和除以2（而且只取整數部分）。例如：在{1,2,3,6,7,8}中{3,6}是位於中間的2個數，所以中間數就是 (3+6)/2=4。\n\n\t\t\t\t\t輸入:\n\t\t\t\t\t輸入包含了N個（N<10000）的整數。\n\n\t\t\t\t\t範例輸入:\n\t\t\t\t\t1\n\t\t\t\t\t3\n\t\t\t\t\t4\n\t\t\t\t\t60\n\t\t\t\t\t70\n\t\t\t\t\t50\n\t\t\t\t\t2\n\n\t\t\t\t\t輸出:\n\t\t\t\t\t對每一個輸入，請輸出到現在為止已輸入的數的中間數。\t\n\t\t\n\t\t\t\t\t範例輸出 :\n\t\t\t\t\t1\n\t\t\t\t\t2\n\t\t\t\t\t3\n\t\t\t\t\t3\n\t\t\t\t\t4\n\t\t\t\t\t27\n\t\t\t\t\t4\n\t\n\t\t",
+        "difficulty": "two_star"
+    },
+	{
+        "id": 15,
+        "title": "UVA10013",
+        "content": "有個新語言 D++ 的開發者發現，不管 SuperLongInt 型態的整數上限訂到多大，程式設計師仍然會有需要處理更大的數字。即使 1000 位數的限制仍然太小… 你需要算出兩個最長為 1,000,000 位數的數字的和。\n\t\t\t\t\t輸入:\n\t\t\t\t\t輸入的第一行為一個整數 N，接下來在一個空行之後有 N 筆測試資料。每筆測資的第一行有一個\n\t\t\t\t\t整數 M (1<=M<=1000000) — 整數的長度 (為使兩個整數等長，需要時會加入前導 0)。接下來會有兩欄數字代表這兩個整數。也就是說，接下來的 M 行每行有兩個以空白隔開的個位數字。\n\t\t\t\t\t這兩個整數都不會小於 1，它們的和也不會超過 M 位數。\n\t\t\t\t\t每筆測試資料間會有一個空行。\n\n\t\t\t\t\t範例輸入:\n\t\t\t\t\t2\n\n\t\t\t\t\t4\n\t\t\t\t\t0 4\n\t\t\t\t\t4 2\n\t\t\t\t\t6 8\n\t\t\t\t\t3 7\n\n\t\t\t\t\t3\n\t\t\t\t\t3 0\n\t\t\t\t\t7 9\n\t\t\t\t\t2 8\n\n\t\t\t\t\t輸出:\n\t\t\t\t\t\t每筆測試要輸出含有剛好 M 位數的一行，代表所輸入的兩個整數的和。\n\t\t\t\t\t每兩筆測試的輸出間要有一行空行。\n\n\t\t\t\t\t範例輸出 :\n\n\t\t\t\t\t4750\n\n\t\t\t\t\t470\n\t\n\t\t",
+        "difficulty": "two_star"
+    },
+	{
+        "id": 16,
+        "title": "UVA10188",
+        "content": "來自程式設計競賽的評審以非常刻薄和懶惰著稱。我們這些評審希望工作量少，錯誤答案更多！所以，我們需要你的幫助，編寫一個自動評審腳本來評估來自世界各地團隊的解題結果。你需要寫一個程序，接收\n\t\t\t\t\t標準答案和團隊輸出，並給出以下其中一個訊息作為答案：\n\t\t\t\t\t「Accepted」：由於我們非常刻薄，只要團隊的輸出與標準答案完全匹配，才會給出「Accepted」的答案。也就是說，所有字符必須匹配，且順序也必須一致。\n\t\t\t\t\t「Presentation Error」：如果所有數字字符匹配（且順序一致），但至少有一個非數字字符錯誤（或順序錯誤），則給出「Presentation Error」。例如，","15 0":"和","150":"會收到\"Presentation Error\"，而","15 0":"和","1 0":"不會\n\t\t\t\t\t（它會收到\"Wrong Answer\"，見下文）。\n\t\t\t\t\t「Wrong Answer」：如果團隊的輸出不符合上述任何一個標準，那麼只能給出\"Wrong Answer\"的答案！\n\n\t\t\t\t\t輸入:\n\t\t\t\t\t輸入將包含任意數量的輸入組。每組輸入以一個小於 100 的正整數 n 開始，單獨一行，描述標準解答的行數。接下來的 n 行包含標準解答。然後是一個小於 100 的正整數 m，單獨一行，描述\n\t\t\t\t\t隊伍輸出的行數。接下來的 m 行包含隊伍輸出。當 n 的值為 0 時，輸入結束，不應再進行處理。 每行不會超過 120 個字符。\n\t\t\t\t\t範例輸入:\n\t\t\t\t\t2\n\t\t\t\t\tThe answer is: 10\n\t\t\t\t\tThe answer is: 5\n\t\t\t\t\t2\n\t\t\t\t\tThe answer is: 10\n\t\t\t\t\tThe answer is: 5\n\t\t\t\t\t2\n\t\t\t\t\tThe answer is: 10\n\t\t\t\t\tThe answer is: 5\n\t\t\t\t\t2\n\t\t\t\t\tThe answer is: 10\n\t\t\t\t\tThe answer is: 15\n\t\t\t\t\t2\n\t\t\t\t\tThe answer is: 10\n\t\t\t\t\tThe answer is: 5\n\t\t\t\t\t2\n\t\t\t\t\tThe answer is: 10\n\t\t\t\t\tThe answer is: 5\n\t\t\t\t\t3\n\t\t\t\t\tInput Set #1: YES\n\t\t\t\t\tInput Set #2: NO\n\t\t\t\t\tInput Set #3: NO\n\t\t\t\t\t3\n\t\t\t\t\tInput Set #0: YES\n\t\t\t\t\tInput Set #1: NO\n\t\t\t\t\tInput Set #2: NO\n\t\t\t\t\t1\n\t\t\t\t\t1 0 1 0\n\t\t\t\t\t1\n\t\t\t\t\t1010\n\t\t\t\t\t1\n\t\t\t\t\tThe judges are mean!\n\t\t\t\t\t1\n\t\t\t\t\tThe judges are good!\n\t\t\t\t\t0\n\n\t\t\t\t\t輸出:\n\t\t\t\t\t\t對於每組輸入，你應輸出以下其中一行：\n\t\t\t\t\tRun #x: Accepted\n\t\t\t\t\tRun #x: Presentation Error\n\t\t\t\t\tRun #x: Wrong Answer\n\t\t\t\t\t其中，x 表示輸入組的編號（從 1 開始）。\n\n\t\t\t\t\t範例輸出 :\n\t\t\t\t\tRun #1: Accepted\n\t\t\t\t\tRun #2: Wrong Answer\n\t\t\t\t\tRun #3: Presentation Error\n\t\t\t\t\tRun #4: Wrong Answer\n\t\t\t\t\tRun #5: Presentation Error\n\t\t\t\t\tRun #6: Presentation Error\n\n\t\t\n\t\t",
+        "difficulty": "two_star"
+    },
+	{
+        "id": 17,
+        "title": "UVA10298",
+        "content": "給你兩個字串 a ,b. 我們定義 a*b 是他們的連結.\n\t\t\t\t\t例如:如果a=\"abc\" ,b=\"def\" 則 a*b =\"abcdef\".\n\t\t\t\t\t如果我們把這種連結想成乘法,一個正常的整數指數會變成: a^0=\"\"(空字串) 與 a^(n+1)=a*(a^n).\n\t\t\t\t\t輸入:\n\t\t\t\t\t測試資料中有若干行\n\t\t\t\t\t每一行代表著一個字串 s \n\t\t\t\t\t對於每個字串s,你應該要找出最大的 s = a^n 的n\n\t\t\t\t\ts的長度最少為1最大不超過1百萬.\n\t\t\t\t\t測試以\".\"作為結尾\n\t\t\t\t\t範例輸入:\n\t\t\t\t\tABCD\n\t\t\t\t\tAAAA\n\t\t\t\t\tababab\n\t\t\t\t\t.\n\t\t\t\t\t輸出:\n\t\t\t\t\t\t對每個s輸出最大的n\n\t\t\t\t\t範例輸出 :\n\t\t\t\t\t1\n\t\t\t\t\t4\n\t\t\t\t\t3\n\t\t",
+        "difficulty": "two_star"
+    },
+	{
+        "id": 18,
+        "title": "UVA10340",
+        "content": "你設計了一種新的加密技術，該技術通過在訊息字串之間插入隨機生成的字串來對消息進行編碼。\n\t\t\t\t\t由於未解決專利問題，我們將不詳細討論如何生成字串。但是，要驗證您的方法，有必要寫一個程式來檢查訊息是否真正編碼在最終字串中。\n\t\t\t\t\t給定兩個字串s和t，您必須確定s是否為t的原始訊息字串，即是否可以從t中刪除字元以使其剩餘字元串聯爲s。\n\t\t\t\t\t輸入:\n\t\t\t\t\t輸入包含多行。\n\t\t\t\t\t每行兩個字串s和t，s和t只會有英文字母。\n\t\t\t\t\t範例輸入:\n\t\t\t\t\t\tsequence subsequence\n\t\t\t\t\t\tperson compression\n\t\t\t\t\t\tVERDI vivaVittorioEmanueleReDiItalia\n\t\t\t\t\t\tcaseDoesMatter CaseDoesMatter\n\t\t\t\t\t輸出:\n\t\t\t\t\t對於每行輸入\n\t\t\t\t\t如果s是t的原始訊息字串\n\t\t\t\t\t輸出\"Yes\"\n\t\t\t\t\t否則\n\t\t\t\t\t輸出\"No\"\n\t\t\t\t\t範例輸出 :\n\t\t\t\t\t\tYes\n\t\t\t\t\t\tNo\n\t\t\t\t\t\tYes\n\t\t\t\t\t\tNo\n\t\t",
+        "difficulty": "two_star"
+    },
+    {
+        "id": 19,
+        "title": "UVA147",
+        "content": "紐西蘭的貨幣包含了 $100, $50, $20, $10,  $5 的紙鈔和 $2, $1, 50c, 20c, 10c, 5c 的硬幣。給你\n\t\t\t\t\t某金額的數字，請你寫一個程式回答：使用這些面額的紙鈔或硬幣，有多少種不同的方法可以組合成這個金額。例如：20c 可以有 4 個方法可以得到：（改變金額的\n\t\t\t\t\t順序不會增加方法數，例如 2 * 5c + 1 * 10c 和下面第3種方法視為同一種）\n\t\t\t\t\t•\t1 * 20c\n\t\t\t\t\t•\t2 * 10c\n\t\t\t\t\t•\t1* 10c + 2 * 5c\n\t\t\t\t\t•\t4 * 5c\n\n\t\t\t\t\t輸入:\n\t\t\t\t\t每組測試資料一列\n\t\t\t\t\t含有 1 個金額（不大於  $300.00）\n\t\t\t\t\t這個金額一定是合法的\n\t\t\t\t\t也就是一定是 5c 的倍數\n\t\t\t\t\t當輸入為  0.00 時代表輸入結束\n\t\t\t\t\t請參考 Sample Input\n\n\t\t\t\t\t範例輸入:\n\t\t\t\t\t0.20\n\t\t\t\t\t2.00\n\t\t\t\t\t0.50\n\t\t\t\t\t1.00\n\t\t\t\t\t100.95\n\t\t\t\t\t300.00\n\t\t\t\t\t0.00\n\n\t\t\t\t\t輸出:\n\t\t\t\t\t\t對每組測試資料輸出一列\n\t\t\t\t\t1: 輸入的金額（小數點2位，總長度6位，靠右對齊）\n\t\t\t\t\t2: 多少種不同的方法可以組合成這個金額（總長度17位，靠右對齊）\n\t\t\t\t\t請參考 Sample Output\n\n\t\t\t\t\t範例輸出 :\n\t\t\t\t\t  0.20                4\n\t\t\t\t\t  2.00              293\n\t\t\t\t\t  0.50               13\n\t\t\t\t\t  1.00               50\n\t\t\t\t\t100.95      50619764500\n\t\t\t\t\t300.00  181490736388615\n\n\t\t\n\t\t",
+        "difficulty": "three_star"
+    },
+	{
+        "id": 20,
+        "title": "UVA991",
+        "content": "鞋匠有 𝑁 件工作要完成。他每天只能做一件工作。並且他知道這些工作分別要幾個工作天才能完成。另外，他也知道\n\t\t\t\t\t每個工作被延誤一天所需被罰的罰金。延誤的天數為從今天算起到該工作開始的那天 (所以只有第一件工作沒有罰金)。\n\t\t\t\t\t以第一組測試資料為例說明：若工作的順序是 1 2 3 4，那罰金為：0×4 + 1000×3 + 4×2 + 6×5 = 3038。若工作的順序是 2 1 3 4，則罰金為：0×1000 + 1×4 + 4×2 + 6×5 = 42。所以第二種工作順序的罰金較少 (事實上也是最少)。\n\t\t\t\t\t你的任務是寫一個程式幫助鞋匠找出完成這 𝑁 個工作的先後順序，使得罰金最少。\n\n\t\t\t\t\t輸入:\n\t\t\t\t\t輸入的第一列有一個整數代表以下有幾組測試資料。\n\t\t\t\t\t每組測試資料的第一列，含有一個整數 𝑁（1 ≤ 𝑁 ≤1000），代表鞋匠需完成的工作數。接下來的 𝑁 列每列有 2 個整數，分別代表該工作完成所需的天數以及延遲一天的罰金多少 (均大於等於 1，小於等於 1000)。\n\t\t\t\t\t第一列和第一組測試資料間，以及各組測試資料間均有一空白列。請參考範例輸入。\n\n\t\t\t\t\t範例輸入:\n\t\t\t\t\t2\n\n\t\t\t\t\t4\n\t\t\t\t\t3 4\n\t\t\t\t\t1 1000\n\t\t\t\t\t2 2\n\t\t\t\t\t5 5\n\n\t\t\t\t\t5\n\t\t\t\t\t3 4\n\t\t\t\t\t1 1000\n\t\t\t\t\t8 8\n\t\t\t\t\t2 2\n\t\t\t\t\t5 6\n\n\t\t\t\t\t輸出:\n\t\t\t\t\t\t對每組測試資料輸出一列，為這 𝑁 個工作的順序使得罰金最少。工作之間以一空白字元分隔。如果有不只一組答案，請輸出字典順序最小的那組。\n\t\t\t\t\t各組測試資料間亦請輸出一空白列。請參考範例輸出。\n\n\t\t\t\t\t範例輸出 :\n\t\t\t\t\t2 1 3 4\n\n\t\t\t\t\t2 1 5 3 4\t\n\t\t",
+        "difficulty": "three_star"
+    },
+	{
+        "id": 21,
+        "title": "UVA997",
+        "content": "給一定組序列，包括每隻大象的智商和重量，求最長的子序列並且符合智商嚴格遞減但重量嚴格遞增的條件\n\t\t\t\t\t輸入:\n\t\t\t\t\t輸入資料的每一列包含兩個整數分別代表一隻大象的重量和智商，兩個的數值範圍從1到10000。由於最多有1000隻大象，因此可能有兩隻大象有相同的智商與重量。\n\n\t\t\t\t\t範例輸入:\n\t\t\t\t\t6008 1300\n\t\t\t\t\t6000 2100\n\t\t\t\t\t500 2000\n\t\t\t\t\t1000 4000\n\t\t\t\t\t1100 3000\n\t\t\t\t\t6000 2000\n\t\t\t\t\t8000 1400\n\t\t\t\t\t6000 1200\n\t\t\t\t\t2000 1900\n\t\t\t\t\t輸出:\n\t\t\t\t\t\t先印出最長子序列的長度、再依智商從小到大列出每一隻符合條件的大象編號\n\t\t\t\t\t範例輸出 :\n\t\t\t\t\t4\n\t\t\t\t\t4\n\t\t\t\t\t5\n\t\t\t\t\t9\n\t\t\t\t\t7\n\t\t",
+        "difficulty": "three_star"
+    },
+	{
+        "id": 22,
+        "title": "UVA10036",
+        "content": "給N個數字在這些數字中加入加號和減號，問是否能組成可被K整除的數字\n\t\t\t\t\tConsider an arbitrary sequence of integers. One can place + or - operators between integers in the sequence, thus deriving different arithmetical expressions that evaluate to different values. Let us, for example, take the sequence: 17, 5, -21, 15. There are eight possible expressions:\n\t\t\t\t\t17 + 5 + -21 + 15 = 16\n\t\t\t\t\t17 + 5 + -21 - 15 = -14\n\t\t\t\t\t17 + 5 - -21 + 15 = 58\n\t\t\t\t\t17 + 5 - -21 - 15 = 28\n\t\t\t\t\t17 - 5 + -21 + 15 = 6\n\t\t\t\t\t17 - 5 + -21 - 15 = -24\n\t\t\t\t\t17 - 5 - -21 + 15 = 48\n\t\t\t\t\t17 - 5 - -21 - 15 = 18\n\t\t\t\t\tWe call the sequence of integers divisible by K if + or - operators can be placed between integers in the sequence in such way that resulting value is divisible by K. In the above example, the sequence is divisible by 7 (17+5+-21-15=-14) but is not divisible by 5.\n\t\t\t\t\tYou are to write a program that will determine divisibility of sequence of integers.\n\n\t\t\t\t\t輸入:\n\t\t\t\t\t\t第一行有個T代表測資數\n\t\t\t\t\t每筆的第一行有N和K(1 ≤ N ≤ 10000, 2 ≤ K ≤ 100)\n\t\t\t\t\t第二行有N個數字\n\t\t\t\t\tThe first line of the input file contains a integer M indicating the number of cases to be analyzed. Then M couples of lines follow.\n\t\t\t\t\tFor each one of this couples, the first line of the input file contains two integers, N and K (1 ≤ N ≤ 10000, 2 ≤ K ≤ 100) separated by a space.\n\t\t\t\t\tThe second line contains a sequence of N integers separated by spaces. Each integer is not greater than 10000 by it\"s absolute value.\n\n\t\t\t\t\t範例輸入:\n\t\t\t\t\t2\n\t\t\t\t\t4 7\n\t\t\t\t\t17 5 -21 15\n\t\t\t\t\t4 5\n\t\t\t\t\t17 5 -21 15\n\n\t\t\t\t\t輸出:\n\t\t\t\t\t\t如可可以輸出\"Divisible\"(不含雙引號)\n\t\t\t\t\t否則輸出\"Not divisible\"(不含雙引號)\n\t\t\t\t\tFor each case in the input file, write to the output file the word \"Divisible\" if given sequence of integers is divisible by K or \"Not divisible\" if it\"s not.\n\n\t\t\t\t\t範例輸出 :\n\t\t\t\t\tDivisible\n\t\t\t\t\tNot divisible\n\t\t",
+        "difficulty": "three_star"
+    },
+	{
+        "id": 23,
+        "title": "UVA10162",
+        "content": "給你一個整數N (1 ≤ N ≤ 2*10^100)。\n\t\t\t\t\t請計算\n\t\t\t\t\tS = 1^1 + 2^2 + 3^3 + ... + N^N。\n\t\t\t\t\t並且輸出S的最後一位數字。\n\n\t\t\t\t\t輸入:\n\t\t\t\t\t輸入每一行有一個整數N (1 ≤ N ≤ 2*10^100)。\n\t\t\t\t\t如果N = 0代表輸入結束。\n\n\t\t\t\t\t範例輸入:\n\t\t\t\t\t1\n\t\t\t\t\t2\n\t\t\t\t\t3\n\t\t\t\t\t0\n\n\t\t\t\t\t輸出:\n\t\t\t\t\t\t對於每個N，輸出S的最後一位數字。\n\t\t\t\t\t範例輸出 :\n\t\t\t\t\t1\n\t\t\t\t\t5\n\t\t\t\t\t2\n\n\t\t\n\t\t",
+        "difficulty": "three_star"
+    }
+]
+

@@ -34,6 +34,7 @@
     <link rel="stylesheet"
         href="https://cdnjs.cloudflare.com/ajax/libs/golden-layout/1.5.9/css/goldenlayout-dark-theme.css"
         integrity="sha256-ygw8PvSDJJUGLf6Q9KIQsYR3mOmiQNlDaxMLDOx9xL0=" crossorigin="anonymous" />
+        
 
 
     <script>
@@ -43,6 +44,12 @@
             }
         };
     </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/js-beautify/1.14.0/beautify.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/js-beautify/1.14.0/beautify-html.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/js-beautify/1.14.0/beautify-css.min.js"></script>  
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.js"></script>
+    
     <script src="../static/vendor/monaco-editor-0.44.0/min/vs/loader.js"></script>
     <script src="../static/vendor/monaco-editor-0.44.0/min/vs/editor/editor.main.nls.js"></script>
     <script src="../static/vendor/monaco-editor-0.44.0/min/vs/editor/editor.main.js"></script>
@@ -192,37 +199,7 @@
                 </button>
             </div>
 
-            <!-- <div class="ui modal" id="debug_modal">
-                <i class="close icon"></i>
-                <div class="header">
-                    除錯結果
-                </div>
-                <div class="image content">
-                    <div class="image" >
-                        <img src="../static/images/remove.png" alt="cross" width="30px">
-                    </div>
-                    <div class="description">
-                        報錯內容
-                    </div>
-                </div>
-                <div class="actions">
-                    <div class="ui button">確認更改</div>
-                    <div class="ui button">維持現狀</div>
-                </div>
-                <hr>
-                <div class="header">
-                    feedback
-                </div> -->
-                <!-- <div class="ui form">
-                    <div class="field">
-                      <textarea rows = "2" id="feedback"></textarea>
-                    <div class="actions">
-                        <div class="ui button" onclick="sendFeedBack()">送出</div>
-                    </div>
-                    </div>
-                </div>
 
-            </div> -->
             <div class="ui modal" id="debug_modal">
                 <i class="close icon"></i>
                 <div class="header">除錯結果</div>
@@ -231,25 +208,45 @@
                         <img src="../static/images/remove.png" alt="cross" width="30px">
                     </div>
                     <div class="description" id="debug-description">
-                        報錯內容
+                        <pre><code id="debug_code"></code></pre>
                     </div>
                 </div>
                 <div class="actions">
                     <div class="ui button" id="confirm-change-btn">確認更改</div>
-                    <div class="ui button">維持現狀</div>
+                    <div class="ui button" onclick="$('#debug_modal').modal('hide');">維持現狀</div>
                 </div>
             </div>
 
+            
 
 
 
             <div class="item no-left-padding borderless">
                 <div class="ui buttons">
+                    {% if user.is_authenticated %}
+                        <!-- 如果用戶已登錄，顯示登出按鈕 -->
+                        <button class="ui button" onclick="logout()">登出</button>
+                    {% else %}
+                        <!-- 如果用戶未登錄，顯示註冊按鈕 -->
+                        <button class="ui positive button" onclick="window.location.href='/signup/'">註冊</button>
+                    {% endif %}
+                </div>
+            </div>
+            
+            
+            
+            
+            
+            
+
+
+            <!-- <div class="item no-left-padding borderless">
+                <div class="ui buttons">
                     <button class="ui button" onclick="logout()">登出</button>
                     <div class="or"></div>
                     <button class="ui positive button active">註冊</button>
                 </div>
-            </div>
+            </div> -->
 
 
         </div>
@@ -299,8 +296,28 @@
 
         </div>
     </div>
+    
+    <div class="ui grid" style="height: 100%;">
+        <div class="row"  >
+            <div class="twelve wide column" id="site-content">
+            </div>
+    
+            <div class="four wide column" id="">
+                <div class="ui buttons">
+                    <button class="big ui blue button"   onclick="displayChooseQuestion()">選擇題目</button>
+                    <!-- <button class="big ui blue button"   onclick="displayViewQuestion()">查看題目</button> -->
+                    <button class="big ui blue button"   onclick="displayAsk()">詢問</button>
+                </div>
 
-    <div id="site-content"></div>
+                <div id="choose"></div>
+
+            </div>
+        </div>
+    </div>    
+
+    
+
+    
 
     <div id="site-modal" class="ui modal">
         <div class="header">
@@ -321,6 +338,9 @@
         <span>© 2016-2023 <a href="https://judge0.com">Judge0</a>
             <span id="status-line"></span>
     </div>
+
+    <!-- 固定顯示題目的彈窗 -->
+
 </body>
 
 </html>

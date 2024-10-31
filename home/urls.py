@@ -16,6 +16,7 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path,include
+from debug_ide import views
 
 from django.conf import settings
 from django.conf.urls.static import static
@@ -23,4 +24,5 @@ from django.conf.urls.static import static
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('debug_ide/' , include('debug_ide.urls')),
+    path('question/', views.question, name='question'),
 ] +static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

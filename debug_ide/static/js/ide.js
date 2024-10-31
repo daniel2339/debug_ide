@@ -249,6 +249,8 @@ function sendFeedBack(){
 }
 
 function logout(){
+    // 清除 sessionStorage 中的用戶名（如果有需要）
+    sessionStorage.removeItem('loggedInUsername');
     window.location.href='./logout'
 }
 
@@ -1324,6 +1326,7 @@ var compilerOptions = {
 }
 
 let debugReply = ""; // 全域變數，用於保存偵錯結果
+let previousDebugReply =""
 
 function showmodal() {
     const code = sourceEditor.getValue(); // 從 Monaco Editor 獲取代碼
@@ -1344,24 +1347,47 @@ function showmodal() {
             "Content-Type": "application/json",
             "X-CSRFToken": csrftoken
         },
-        body: JSON.stringify({ code })
+        body: JSON.stringify({type:"code", code })
     })
     .then(response => {
         if (!response.ok) {
-            throw new Error(`HTTP error! Status: ${response.status}`);
+            throw new Error(`HTTP error! status: ${response.status}`);
         }
         return response.json();
     })
     .then(data => {
         if (data.reply) {
-            debugReply = data.reply; // 保存偵錯結果
+            const formattedCode = data.reply.replace(/<pre><code>/g, '').replace(/<\/code><\/pre>/g, '').replace(/```[a-z]*\n?/g, '');
+
+            debugReply = formattedCode; // 保存格式化後的偵錯結果
+            console.log("Received debug reply:", debugReply); // 打印 debugReply 確認值
+            
+            // 格式化代碼，增加易讀性
+            debugReply = js_beautify(debugReply, {
+                indent_size: 4,
+                space_in_empty_paren: true
+            });
 
             // 更新模態框中的描述內容為偵錯結果
-            const descriptionElement = document.querySelector("#debug-description");
+            const descriptionElement = document.querySelector("#debug_code");
             descriptionElement.textContent = debugReply;
+
+            previousDebugReply = debugReply;
 
             // 顯示模態框
             $('#debug_modal').modal('show');
+            document.getElementById("confirm-change-btn").addEventListener("click", function () {
+                if (debugReply) {
+                    // 使用 setValue() 方法一次性覆蓋編輯器內容
+                    sourceEditor.setValue(debugReply);
+                    console.log("Updated code:", sourceEditor.getValue());
+
+                    // 隱藏模態框
+                    $('#debug_modal').modal('hide');
+                } else {
+                    console.error("debugReply 為空，無法進行更新。");
+                }
+            });
         } else {
             showError("偵錯失敗", "未能獲取偵錯結果，請稍後再試。");
         }
@@ -1372,15 +1398,222 @@ function showmodal() {
     });
 }
 
-// 處理“確認更改”按鈕點擊事件
-document.getElementById("confirm-change-btn").addEventListener("click", () => {
-    if (debugReply) {
-        sourceEditor.setValue(debugReply); // 將偵錯結果更新到 Monaco Editor 中
+
+
+
+
+
+let selectedQuestion = "";
+let errorDescription = ""; 
+let userCode = ""; // 全域變數，用於保存使用者的原始代碼
+function displayChooseQuestion() {
+    let chooseHtml =`<h3 class="white">選擇題目</h3>
+        <div  class="question">
+            <button class="mini ui button" onclick="loadQuestions('one_star')" >一星題</button>
+            <button class="mini ui button" onclick="loadQuestions('two_star')">二星題</button>
+            <button class="mini ui button" onclick="loadQuestions('three_star')">三星題</button>
+        </div>
+        <div id="question-list" style="color: "white"></div>
+        `;
+
+    document.getElementById("choose").innerHTML = chooseHtml;
+}
+
+// 從本地資料夾中讀取題目
+function loadQuestions(starLevel) {
+    fetch('/static/question_v2.json')
+        .then(response => response.json())
+        .then(questions => {
+            // 根據星級過濾題目
+            let filteredQuestions = questions.filter(question => question.difficulty === starLevel);
+            let questionListHtml = `<h4 style="color: white;">選擇題目：</h4><ul style="color: white;">`;
+
+            filteredQuestions.forEach((question, index) => {
+                questionListHtml += `<li><button class="ui inverted primary button" onclick="selectQuestion(${index}, '${starLevel}')">${question.title}</button></li>`;
+            });
+
+            questionListHtml += "</ul>";
+            document.getElementById("question-list").innerHTML = questionListHtml;
+        })
+        .catch(error => {
+            console.error("Error fetching JSON data:", error);
+        });
+}
+
+// 顯示選擇的題目內容在 choose 區域
+function selectQuestion(index, starLevel) {
+    fetch('/static/question_v2.json')
+        .then(response => response.json())
+        .then(questions => {
+            // 根據星級過濾題目
+            let filteredQuestions = questions.filter(question => question.difficulty === starLevel);
+            let selectedQuestion = filteredQuestions[index];
+
+            if (selectedQuestion) {
+                // 顯示題目內容到 choose 區域
+                let contentHtml = `
+                    <div style="padding: 20px; background-color: #1b1c1d; color: white; border-radius: 10px; overflow-y: auto; max-height: 70vh;">
+                        <h3 style="font-size: 1.8em; font-weight: bold; margin-bottom: 15px; color: #21ba45;">${selectedQuestion.title}</h3>
+                        <p style="font-size: 1.2em; line-height: 1.6; white-space: pre-wrap;">${selectedQuestion.content}</p>
+                    </div>
+                `;
+                document.getElementById("choose").innerHTML = contentHtml;
+            } else {
+                alert("選擇的題目不存在！");
+            }
+        })
+        .catch(error => {
+            console.error("Error fetching JSON data:", error);
+        });
+}
+
+
+// 顯示查看題目的畫面
+// function displayViewQuestion() {
+//     if (selectedQuestion) {
+//         document.getElementById("site-content").innerHTML = `<h3>${selectedQuestion.title}</h3><pre>${selectedQuestion.content}</pre>`;
+//     } else {
+//         alert("請先選擇題目！");
+//     }
+// }
+
+
+
+
+// 顯示詢問或回饋的功能
+function displayAsk() {
+    let askHtml = `
+        <h3 class="white">詢問 </h3>
+        <div>
+            <textarea id="userQuestion" placeholder="請輸入您的問題" style="width: 100%; height: 100px;"></textarea>
+            <button class="mini ui button" onclick="askOpenAI()">發送</button>
+            <button class="mini ui button" onclick="clearAskResponse()">清除回覆</button>
+        </div>
+        <div id="ask-response" style="background-color: white; padding: 20px; border-radius: 10px; color: black; min-height: 100px;margin-top: 6px;">
+        </div>
+    `;
+    document.getElementById("choose").innerHTML = askHtml;
+}
+
+// 發送問題或回饋給 OpenAI
+function askOpenAI() {
+    let question = document.getElementById("userQuestion").value.trim();
+
+    if (!question) {
+        alert("請輸入問題");
+        return;
     }
 
-    // 隱藏模態框
-    $('#debug_modal').modal('hide');
-});
+    // 檢查是否包含與代碼相關的關鍵詞
+    const codeRelatedKeywords = ["剛剛", "代碼", "哪裡有問題", "為什麼這樣改", "debug","錯在哪裡"];
+    let includeCode = codeRelatedKeywords.some(keyword => question.includes(keyword));
 
+    // 如果包含相關的關鍵詞，則附加代碼
+    if (includeCode && userCode) {
+        question += `\n\n這是我之前的代碼：\n${userCode}`;
+    }
 
+    // 使用 fetch 發送問題到後端的 API 端點
+    fetch("/debug_ide/api/debug/", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+            "X-CSRFToken": document.getElementById('csrf_token').value  // 假設你有 CSRF Token 需要發送
+        },
+        body: JSON.stringify({ type: "general", code: question })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.reply) {
+            let currentResponse = document.getElementById("ask-response").innerHTML;
+
+            // 保留先前的回覆，並以兩行空白作為間隔顯示
+            let updatedResponse = `${currentResponse}<br><br>回覆：${data.reply}`;
+
+            document.getElementById("ask-response").innerHTML = updatedResponse;
+
+            document.getElementById("userQuestion").value = "";
+        } else {
+            document.getElementById("ask-response").innerHTML += `<br><br>未能獲取回覆，請稍後再試。`;
+        }
+    })
+    .catch(error => {
+        console.error("發送問題時發生錯誤:", error);
+        document.getElementById("ask-response").innerHTML += `<br><br>發送問題時發生錯誤，請檢查網絡連線。`;
+    });
+}
+
+// 清除回覆框中的內容
+function clearAskResponse() {
+    document.getElementById("ask-response").innerHTML = "";
+}
+
+// 偵錯代碼後保存結果與問題說明
+function showmodal() {
+    const code = sourceEditor.getValue(); // 從 Monaco Editor 獲取代碼
+    const csrftoken = document.getElementById('csrf_token').value; // 獲取 CSRF Token
+
+    if (!code.trim()) {
+        showError("Error", "代碼不能為空！");
+        return;
+    }
+
+    console.log("Sending code for debugging:", code);
+    userCode = code; // 保存使用者的原始代碼
+
+    // 發送偵錯請求到後端
+    fetch("/debug_ide/api/debug/", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+            "X-CSRFToken": csrftoken
+        },
+        body: JSON.stringify({ type: "code", code })
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        return response.json();
+    })
+    .then(data => {
+        if (data.reply) {
+            const formattedCode = data.reply.replace(/<pre><code>/g, '').replace(/<\/code><\/pre>/g, '').replace(/```[a-z]*\n?/g, '');
+
+            debugReply = formattedCode; // 保存格式化後的偵錯結果
+            console.log("Received debug reply:", debugReply); // 打印 debugReply 確認值
+            
+            // 格式化代碼，增加易讀性
+            debugReply = js_beautify(debugReply, {
+                indent_size: 4,
+                space_in_empty_paren: true
+            });
+
+            // 更新模態框中的描述內容為偵錯結果
+            const descriptionElement = document.querySelector("#debug_code");
+            descriptionElement.textContent = debugReply;
+
+            // 顯示模態框
+            $('#debug_modal').modal('show');
+            document.getElementById("confirm-change-btn").addEventListener("click", function () {
+                if (debugReply) {
+                    // 使用 setValue() 方法一次性覆蓋編輯器內容
+                    sourceEditor.setValue(debugReply);
+                    console.log("Updated code:", sourceEditor.getValue());
+
+                    // 隱藏模態框
+                    $('#debug_modal').modal('hide');
+                } else {
+                    console.error("debugReply 為空，無法進行更新。");
+                }
+            });
+        } else {
+            showError("偵錯失敗", "未能獲取偵錯結果，請稍後再試。");
+        }
+    })
+    .catch(error => {
+        console.error("偵錯時發生錯誤:", error);
+        showError("偵錯失敗", "請檢查網絡連線或稍後再試。");
+    });
+}
 

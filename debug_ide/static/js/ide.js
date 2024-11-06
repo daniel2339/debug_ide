@@ -1338,7 +1338,7 @@ function showmodal() {
     }
 
     console.log("Sending code for debugging:", code);
-
+    userCode = code; // 保存使用者的原始代碼
 
     // 發送偵錯請求到後端
     fetch("/debug_ide/api/debug/", {
@@ -1347,7 +1347,7 @@ function showmodal() {
             "Content-Type": "application/json",
             "X-CSRFToken": csrftoken
         },
-        body: JSON.stringify({type:"code", code })
+        body: JSON.stringify({ type: "code", code })
     })
     .then(response => {
         if (!response.ok) {
@@ -1357,35 +1357,53 @@ function showmodal() {
     })
     .then(data => {
         if (data.reply) {
-            const formattedCode = data.reply.replace(/<pre><code>/g, '').replace(/<\/code><\/pre>/g, '').replace(/```[a-z]*\n?/g, '');
-
+            let formattedCode = data.reply.replace(/<pre><code>/g, '').replace(/<\/code><\/pre>/g, '').replace(/```[a-z]*\n?/g, '');
+    
+            // 檢查回覆是否是 "此code沒有錯誤"
+            if (formattedCode.trim().toLowerCase() === "此code沒有錯誤") {
+                formattedCode = "此code沒有錯誤";
+    
+                // 禁用「確認更改」按鈕
+                const confirmButton = document.getElementById("confirm-change-btn");
+                confirmButton.disabled = true;
+                confirmButton.classList.add("disabled");
+            } else {
+                // 如果代碼有改變，則啟用「確認更改」按鈕
+                const confirmButton = document.getElementById("confirm-change-btn");
+                confirmButton.disabled = false;
+                confirmButton.classList.remove("disabled");
+    
+                // 格式化代碼，增加易讀性
+                formattedCode = js_beautify(formattedCode, {
+                    indent_size: 4,
+                    space_in_empty_paren: true
+                });
+            }
+    
             debugReply = formattedCode; // 保存格式化後的偵錯結果
             console.log("Received debug reply:", debugReply); // 打印 debugReply 確認值
-            
-            // 格式化代碼，增加易讀性
-            debugReply = js_beautify(debugReply, {
-                indent_size: 4,
-                space_in_empty_paren: true
-            });
-
+    
             // 更新模態框中的描述內容為偵錯結果
             const descriptionElement = document.querySelector("#debug_code");
             descriptionElement.textContent = debugReply;
-
+    
             previousDebugReply = debugReply;
-
+    
             // 顯示模態框
             $('#debug_modal').modal('show');
+    
             document.getElementById("confirm-change-btn").addEventListener("click", function () {
-                if (debugReply) {
-                    // 使用 setValue() 方法一次性覆蓋編輯器內容
-                    sourceEditor.setValue(debugReply);
-                    console.log("Updated code:", sourceEditor.getValue());
-
-                    // 隱藏模態框
-                    $('#debug_modal').modal('hide');
-                } else {
-                    console.error("debugReply 為空，無法進行更新。");
+                if (!confirmButton.disabled) {
+                    if (debugReply) {
+                        // 使用 setValue() 方法一次性覆蓋編輯器內容
+                        sourceEditor.setValue(debugReply);
+                        console.log("Updated code:", sourceEditor.getValue());
+    
+                        // 隱藏模態框
+                        $('#debug_modal').modal('hide');
+                    } else {
+                        console.error("debugReply 為空，無法進行更新。");
+                    }
                 }
             });
         } else {
@@ -1407,60 +1425,94 @@ let selectedQuestion = "";
 let errorDescription = ""; 
 let userCode = ""; // 全域變數，用於保存使用者的原始代碼
 function displayChooseQuestion() {
-    let chooseHtml =`<h3 class="white">選擇題目</h3>
-        <div  class="question">
-            <button class="mini ui button" onclick="loadQuestions('one_star')" >一星題</button>
+    let chooseHtml = `<h3 class="white">選擇題目</h3>
+        <div class="question">
+            <button class="mini ui button" onclick="loadQuestions('one_star')">一星題</button>
             <button class="mini ui button" onclick="loadQuestions('two_star')">二星題</button>
             <button class="mini ui button" onclick="loadQuestions('three_star')">三星題</button>
         </div>
-        <div id="question-list" style="color: "white"></div>
-        `;
+        <div id="question-list" style="color: white;"></div>
+    `;
 
     document.getElementById("choose").innerHTML = chooseHtml;
 }
 
 // 從本地資料夾中讀取題目
+// function loadQuestions(starLevel) {
+//     fetch('/static/question_v2.json')
+//         .then(response => response.json())
+//         .then(questions => {
+//             // 根據星級過濾題目
+//             let filteredQuestions = questions.filter(question => question.difficulty === starLevel);
+//             let questionListHtml = `<h4 style="color: white;">選擇題目：</h4><ul style="color: white;">`;
+
+//             filteredQuestions.forEach((question, index) => {
+//                 questionListHtml += `<li><button class="ui inverted primary button" onclick="selectQuestion(${index}, '${starLevel}')">${question.title}</button></li>`;
+//             });
+
+//             questionListHtml += "</ul>";
+//             document.getElementById("question-list").innerHTML = questionListHtml;
+//         })
+//         .catch(error => {
+//             console.error("Error fetching JSON data:", error);
+//         });
+// }
+
 function loadQuestions(starLevel) {
-    fetch('/static/question_v2.json')
+    fetch("/static/question_v2.json")
         .then(response => response.json())
-        .then(questions => {
-            // 根據星級過濾題目
-            let filteredQuestions = questions.filter(question => question.difficulty === starLevel);
-            let questionListHtml = `<h4 style="color: white;">選擇題目：</h4><ul style="color: white;">`;
-
-            filteredQuestions.forEach((question, index) => {
-                questionListHtml += `<li><button class="ui inverted primary button" onclick="selectQuestion(${index}, '${starLevel}')">${question.title}</button></li>`;
+        .then(data => {
+            let questions = data.filter(q => q.difficulty === starLevel);
+            let questionListHtml = "<h4 style='color: white'>選擇題目：</h4><ul style='color: white'>";
+            questions.forEach((question, index) => {
+                questionListHtml += `<li><button onclick="selectQuestion(${index}, '${starLevel}')">${question.title}</button></li>`;
             });
-
             questionListHtml += "</ul>";
+
             document.getElementById("question-list").innerHTML = questionListHtml;
         })
         .catch(error => {
             console.error("Error fetching JSON data:", error);
+            document.getElementById("question-list").innerHTML = "<p style='color: white'>無法獲取題目數據，請稍後再試。</p>";
         });
 }
 
 // 顯示選擇的題目內容在 choose 區域
-function selectQuestion(index, starLevel) {
-    fetch('/static/question_v2.json')
-        .then(response => response.json())
-        .then(questions => {
-            // 根據星級過濾題目
-            let filteredQuestions = questions.filter(question => question.difficulty === starLevel);
-            let selectedQuestion = filteredQuestions[index];
+// function selectQuestion(index, starLevel) {
+//     fetch('/static/question_v2.json')
+//         .then(response => response.json())
+//         .then(questions => {
+//             // 根據星級過濾題目
+//             let filteredQuestions = questions.filter(question => question.difficulty === starLevel);
+//             let selectedQuestion = filteredQuestions[index];
 
-            if (selectedQuestion) {
-                // 顯示題目內容到 choose 區域
-                let contentHtml = `
-                    <div style="padding: 20px; background-color: #1b1c1d; color: white; border-radius: 10px; overflow-y: auto; max-height: 70vh;">
-                        <h3 style="font-size: 1.8em; font-weight: bold; margin-bottom: 15px; color: #21ba45;">${selectedQuestion.title}</h3>
-                        <p style="font-size: 1.2em; line-height: 1.6; white-space: pre-wrap;">${selectedQuestion.content}</p>
-                    </div>
-                `;
-                document.getElementById("choose").innerHTML = contentHtml;
-            } else {
-                alert("選擇的題目不存在！");
-            }
+//             if (selectedQuestion) {
+//                 // 顯示題目內容到 choose 區域
+//                 let contentHtml = `
+//                     <div style="padding: 20px; background-color: #1b1c1d; color: white; border-radius: 10px; overflow-y: auto; max-height: 70vh;">
+//                         <h3 style="font-size: 1.8em; font-weight: bold; margin-bottom: 15px; color: #21ba45;">${selectedQuestion.title}</h3>
+//                         <p style="font-size: 1.2em; line-height: 1.6; white-space: pre-wrap;">${selectedQuestion.content}</p>
+//                     </div>
+//                 `;
+//                 document.getElementById("choose").innerHTML = contentHtml;
+//             } else {
+//                 alert("選擇的題目不存在！");
+//             }
+//         })
+//         .catch(error => {
+//             console.error("Error fetching JSON data:", error);
+//         });
+// }
+
+
+
+function selectQuestion(index, starLevel) {
+    fetch("/static/question_v2.json")
+        .then(response => response.json())
+        .then(data => {
+            let questions = data.filter(q => q.difficulty === starLevel);
+            selectedQuestion = questions[index];
+            document.getElementById("choose").innerHTML = `<div style='color: white'>題目：${selectedQuestion.title}<br><pre style='white-space: pre-wrap; color: white;'>${selectedQuestion.content}</pre></div>`;
         })
         .catch(error => {
             console.error("Error fetching JSON data:", error);
@@ -1469,14 +1521,51 @@ function selectQuestion(index, starLevel) {
 
 
 // 顯示查看題目的畫面
-// function displayViewQuestion() {
-//     if (selectedQuestion) {
-//         document.getElementById("site-content").innerHTML = `<h3>${selectedQuestion.title}</h3><pre>${selectedQuestion.content}</pre>`;
-//     } else {
-//         alert("請先選擇題目！");
-//     }
-// }
+function displayChooseQuestion() {
+    let chooseHtml = `<h3 class="white">選擇題目</h3>
+        <div class="question">
+            <button class="mini ui button" onclick="loadQuestions('one_star')">一星題</button>
+            <button class="mini ui button" onclick="loadQuestions('two_star')">二星題</button>
+            <button class="mini ui button" onclick="loadQuestions('three_star')">三星題</button>
+        </div>
+        <div id="question-list" style="color: white"></div>
+    `;
 
+    document.getElementById("choose").innerHTML = chooseHtml;
+}
+
+
+
+function solveQues() {
+    if (!selectedQuestion) {
+        alert("請先選擇題目");
+        return;
+    }
+
+    let promptMessage = `請幫助我解釋這個題目的解題思路：\n\n題目：${selectedQuestion.title}\n內容：${selectedQuestion.content}`;
+
+    fetch("/debug_ide/api/debug/", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+            "X-CSRFToken": document.getElementById('csrf_token').value
+        },
+        body: JSON.stringify({ type: "solution", code: promptMessage })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.reply) {
+            // 顯示解題思路的回覆在對話框
+            document.getElementById("solution-response").innerHTML = `<div class='ui message'><b>解題思路：</b><br>${data.reply}</div>`;
+        } else {
+            document.getElementById("solution-response").innerHTML = `<div style='color: white'>未能獲取解題思路，請稍後再試。</div>`;
+        }
+    })
+    .catch(error => {
+        console.error("Error fetching solution explanation:", error);
+        document.getElementById("solution-response").innerHTML = `<div style='color: white'>獲取解題思路時發生錯誤，請檢查網絡連線。</div>`;
+    });
+}
 
 
 
@@ -1495,6 +1584,7 @@ function displayAsk() {
     document.getElementById("choose").innerHTML = askHtml;
 }
 
+
 // 發送問題或回饋給 OpenAI
 function askOpenAI() {
     let question = document.getElementById("userQuestion").value.trim();
@@ -1503,6 +1593,7 @@ function askOpenAI() {
         alert("請輸入問題");
         return;
     }
+    
 
     // 檢查是否包含與代碼相關的關鍵詞
     const codeRelatedKeywords = ["剛剛", "代碼", "哪裡有問題", "為什麼這樣改", "debug","錯在哪裡"];
@@ -1617,3 +1708,11 @@ function showmodal() {
     });
 }
 
+function displayViewQuestion() {
+    if (!selectedQuestion) {
+        alert("請先選擇題目");
+        return;
+    }
+
+    document.getElementById("choose").innerHTML = `<div style='color: white'>題目：${selectedQuestion.title}<br><pre style='white-space: pre-wrap; color: white;'>${selectedQuestion.content}</pre></div>`;
+}

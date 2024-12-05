@@ -109,7 +109,7 @@ def debug_code(request):
             if request_type == "code":
                 prompt = f"只需要回覆我修正後的程式碼並排版完整，只要code不用任何說明 這段文字: (如果正確則回答 此code沒有錯誤)\n\n{content}"
             elif request_type == "general":
-                prompt = f"這是使用者的代碼及相關問題，請根據這些資訊回答問題，只需回覆錯誤的那行就好：\n\n{content}"
+                prompt = f"這是使用者的代碼及相關問題，請根據這些資訊回答問題，只需回覆錯誤的那行就好，如果使用者問的問題與該題無關，就回答使用者的問題即可：\n\n{content}"
             elif request_type == "solution":
                 prompt = f"請幫助我解釋這個題目的解題思路，給出簡單明瞭的步驟和建議：\n\n{content}"
             else:
